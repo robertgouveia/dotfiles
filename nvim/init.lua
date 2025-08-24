@@ -15,12 +15,24 @@ vim.pack.add({
 	{ src = 'https://github.com/nordtheme/vim' },
 	{ src = 'https://github.com/stevearc/oil.nvim' },
 	{ src = 'https://github.com/echasnovski/mini.pick' },
-	{ src = 'https://github.com/neovim/nvim-lspconfig' },
+	{ src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+	{ src = 'https://github.com/mason-org/mason.nvim' },
 })
 
 --		SETUP		--
 require 'mini.pick'.setup()
+require 'mason'.setup()
 require 'oil'.setup()
+
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "lua" },
+  sync_install = false,
+  auto_install = true,
+  ignore_install = {},
+	modules = {},
+
+  highlight = { enable = true },
+}
 
 vim.lsp.enable({ "lua_ls" })
 
@@ -38,6 +50,7 @@ vim.cmd('set completeopt+=noselect')
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 
 vim.keymap.set('n', '<leader>f', ':Pick files<CR>')
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {desc = "Diagnostics under cursor"})
 vim.keymap.set('n', '<leader>h', ':Pick help<CR>')
 vim.keymap.set('n', '<leader>e', ':Oil<CR>')
 
