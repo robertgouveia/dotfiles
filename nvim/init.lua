@@ -17,6 +17,7 @@ vim.pack.add({
 	{ src = 'https://github.com/echasnovski/mini.pick' },
 	{ src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
 	{ src = 'https://github.com/mason-org/mason.nvim' },
+	{ src = 'https://github.com/williamboman/mason-lspconfig.nvim' },
 })
 
 --		SETUP		--
@@ -24,25 +25,29 @@ require 'mini.pick'.setup()
 require 'mason'.setup()
 require 'oil'.setup()
 
+require 'mason-lspconfig'.setup({
+		automatic_installation = true,	
+})
+
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua" },
-  sync_install = false,
-  auto_install = true,
-  ignore_install = {},
+	ensure_installed = { "lua" },
+	sync_install = false,
+	auto_install = true,
+	ignore_install = {},
 	modules = {},
 
-  highlight = { enable = true },
+	highlight = { enable = true },
 }
 
 vim.lsp.enable({ "lua_ls" })
 
 vim.api.nvim_create_autocmd('LspAttach', {
-		callback = function(ev)
-				local client = vim.lsp.get_client_by_id(ev.data.client_id)
-				if client:supports_method('textDocument/completion') then
-						vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-				end
-		end,
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client:supports_method('textDocument/completion') then
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+		end
+	end,
 })
 vim.cmd('set completeopt+=noselect')
 
@@ -50,7 +55,7 @@ vim.cmd('set completeopt+=noselect')
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 
 vim.keymap.set('n', '<leader>f', ':Pick files<CR>')
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {desc = "Diagnostics under cursor"})
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Diagnostics under cursor" })
 vim.keymap.set('n', '<leader>h', ':Pick help<CR>')
 vim.keymap.set('n', '<leader>e', ':Oil<CR>')
 
